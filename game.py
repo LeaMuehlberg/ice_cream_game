@@ -25,8 +25,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load("new_red.png")
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (90, 90))
+        self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0) #?
         
     def move(self):
@@ -43,19 +43,18 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load("cone.png")
-        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (150, 150))
-        #self.rect.center = (160, 520)
-        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+        self.rect = self.image.get_rect()
+        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100)
     
     def update(self):
         pressed_keys = pygame.key.get_pressed()
         if self.rect.left > 0:
             if pressed_keys[K_LEFT]:
-                self.rect.move_ip(-15, 0)
+                self.rect.move_ip(-10, 0)
         if self.rect.right < SCREEN_WIDTH:
             if pressed_keys[K_RIGHT]:
-                self.rect.move_ip(15, 0)
+                self.rect.move_ip(10, 0)
     
     def draw(self, surface):
         surface.blit(self.image, self.rect)
