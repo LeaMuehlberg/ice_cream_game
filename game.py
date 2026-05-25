@@ -19,7 +19,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 DISPLAYSURF.fill(WHITE)
-pygame.display.set_caption("Cream Scoop Scoop!")
+pygame.display.set_caption("Scoop it up!")
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -27,13 +27,13 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load("new_red.png")
         self.image = pygame.transform.scale(self.image, (90, 90))
         self.rect = self.image.get_rect()
-        self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0) #?
+        self.rect.center = (random.randint(75, SCREEN_WIDTH - 75), 100)
         
     def move(self):
         self.rect.move_ip(0, 10)
         if (self.rect.bottom > SCREEN_HEIGHT):
             self.rect.top = 0
-            self.rect.center = (random.randint(30, 370), 0) #?
+            self.rect.center = (random.randint(75, SCREEN_WIDTH - 75), 100)
     
     def draw(self, surface):
         surface.blit(self.image, self.rect)
