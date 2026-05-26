@@ -1,24 +1,29 @@
+# import
 import pygame, sys
 from pygame.locals import *
-import random
+import random, time
 
+# init
 pygame.init()
 
+# fps
 FPS = 60
-FramePerSec = pygame.time.Clock()
+clock = pygame.time.Clock()
 
 # colors
 BLUE = (0, 0, 255)
-RED = (255, 0, 0)
+GREY = (128, 128, 128)
 GREEN = (0, 255, 0)
+RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # screen info
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
+SPEED = 5
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-DISPLAYSURF.fill(WHITE)
+DISPLAYSURF.fill(GREY)
 pygame.display.set_caption("Scoop it up!")
 
 class Enemy(pygame.sprite.Sprite):
@@ -35,8 +40,8 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.top = 0
             self.rect.center = (random.randint(75, SCREEN_WIDTH - 75), 100)
     
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
+    #def draw(self, surface):
+    #    surface.blit(self.image, self.rect)
         
     
 class Player(pygame.sprite.Sprite):
@@ -56,23 +61,50 @@ class Player(pygame.sprite.Sprite):
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(10, 0)
     
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
+    #def draw(self, surface):
+    #    surface.blit(self.image, self.rect)
     
+# sprites
 P1 = Player()
 E1 = Enemy()
 
+# sprite groups
+enemies = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(E1)
+all_sprites.add(P1)
+
+# new user event? speed
+
+# loop
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-    P1.update()
-    E1.move()
+            
+    #P1.update()
+    #E1.move()
     
-    DISPLAYSURF.fill(WHITE)
-    P1.draw(DISPLAYSURF)
-    E1.draw(DISPLAYSURF)
+    DISPLAYSURF.fill(GREY)
+    # move and draw sprites
+    for sprite in all_sprites:
+        DISPLAYSURF.blit(sprite.image, sprite.rect)
+        sprite.move()
+        
+    # collisions
+    if pygame.sprite.spritecollideany(P1, enemies):
+        DISPLAYSURF.fill(RED)
+        pygame.display.update()
+        for sprite in all_sprites:
+            sprite.kill()
+        time.sleep(2) # ?
+        pygame.quit()
+        sys.exit()
+    
+    #P1.draw(DISPLAYSURF)
+    #E1.draw(DISPLAYSURF)
     
     pygame.display.update()
-    FramePerSec.tick(FPS)
+    clock.tick(FPS)
