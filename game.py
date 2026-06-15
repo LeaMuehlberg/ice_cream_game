@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100)
     
-    def update(self):
+    def move(self):
         pressed_keys = pygame.key.get_pressed()
         if self.rect.left > 0:
             if pressed_keys[K_LEFT]:
