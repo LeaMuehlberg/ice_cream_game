@@ -25,6 +25,8 @@ SPEED = 5
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 DISPLAYSURF.fill(GREY)
 pygame.display.set_caption("Scoop it up!")
+score = 0
+font = pygame.font.Font(None, 40)
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -39,11 +41,7 @@ class Enemy(pygame.sprite.Sprite):
         if (self.rect.bottom > SCREEN_HEIGHT):
             self.rect.top = 0
             self.rect.center = (random.randint(75, SCREEN_WIDTH - 75), 100)
-    
-    #def draw(self, surface):
-    #    surface.blit(self.image, self.rect)
-        
-    
+     
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -61,9 +59,6 @@ class Player(pygame.sprite.Sprite):
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(10, 0)
     
-    #def draw(self, surface):
-    #    surface.blit(self.image, self.rect)
-    
 # sprites
 P1 = Player()
 E1 = Enemy()
@@ -75,19 +70,15 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(E1)
 all_sprites.add(P1)
 
-# new user event? speed
-
 # loop
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-            
-    #P1.update()
-    #E1.move()
-    
+
     DISPLAYSURF.fill(GREY)
+    
     # move and draw sprites
     for sprite in all_sprites:
         DISPLAYSURF.blit(sprite.image, sprite.rect)
@@ -95,16 +86,11 @@ while True:
         
     # collisions
     if pygame.sprite.spritecollideany(P1, enemies):
-        DISPLAYSURF.fill(RED)
-        pygame.display.update()
-        for sprite in all_sprites:
-            sprite.kill()
-        time.sleep(2) # ?
-        pygame.quit()
-        sys.exit()
-    
-    #P1.draw(DISPLAYSURF)
-    #E1.draw(DISPLAYSURF)
-    
+        score += 1
+        E1.rect.top = 0
+        E1.rect.centerx = random.randint(75, SCREEN_WIDTH - 75)
+      
+    score_text = font.render(f"Score: {score}", True, BLACK)
+    DISPLAYSURF.blit(score_text, (10, 10))
     pygame.display.update()
     clock.tick(FPS)
